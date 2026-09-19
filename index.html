@@ -3,112 +3,147 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>breathhub.</title>
-<meta name="theme-color" content="#0F0F11">
+<title>breathe.</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1e1a" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="breathhub.">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="breathe.">
 <link rel="manifest" href="manifest.json">
 <meta name="description" content="A 10-day breathwork course and follow-along pacer.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F0F11'/%3E%3Ctext x='14' y='45' font-family='Space Grotesk,Helvetica,sans-serif' font-size='34' font-weight='700' fill='%23EDEDF0'%3Eb%3C/text%3E%3Ccircle cx='44' cy='41' r='5' fill='%23F2C16B'/%3E%3C/svg%3E" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* My Hub theme (matches food hub and training log) — Saffron accent */
   :root{
-    --bg:#0F0F11;
-    --surface:#17171B;
-    --surface-2:#1F1F25;
-    --line:rgba(255,255,255,.09);
-    --text:#EDEDF0;
-    --muted:#8B8B97;
-    --lavender:#B4A9FF;
-    --accent:#F2C16B;            /* breathhub. accent — change this one value to re-skin */
-    --accent-dim:rgba(242,193,107,.14);
-    --warn:#FF8F6B;
-    --r:14px;
+    --bg:#f4f1ea; --surface:#fffdf8; --surface-2:#f0ece3; --hover:#f9f6ef;
+    --line:#e5dfd0; --line-soft:#efebdf;
+    --text:#2c2218; --muted:#6b6055; --faint:#a8a295;
+    --accent:#c08020; --accent-hover:#a06a16; --accent-text:#8a5a14;   /* breathe. accent */
+    --accent-dim:#c0802014; --accent-border:#c0802030;
+    --warn:#b54e4e; --warn-dim:#b54e4e10;
+    --on-accent:#fff;
+    --shadow:0 1px 3px rgba(44,34,24,.06);
+    --noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.035 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    --disp:'Lora',Georgia,serif;
+    --body:'Source Sans 3',system-ui,-apple-system,Helvetica,Arial,sans-serif;
+    --r:12px;
     --maxw:640px;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#1a1e1a; --surface:#232823; --surface-2:#2e342e; --hover:#2a302a;
+      --line:#3a423a; --line-soft:#343b34;
+      --text:#ebe8de; --muted:#a8a89c; --faint:#6b7568;
+      --accent:#e09d3a; --accent-hover:#eaae50; --accent-text:#e0b870;
+      --accent-dim:#e09d3a1c; --accent-border:#e09d3a38;
+      --warn:#c96b6b; --warn-dim:#c96b6b18;
+      --on-accent:#1a1e1a;
+      --shadow:0 1px 4px rgba(0,0,0,.35);
+      --noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      color-scheme:dark;
+    }
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
-    background:var(--bg);color:var(--text);
-    font-family:'Space Grotesk',system-ui,-apple-system,Helvetica,Arial,sans-serif;
-    font-size:16px;line-height:1.55;
-    -webkit-font-smoothing:antialiased;
-    padding:0 20px calc(28px + env(safe-area-inset-bottom));
+    background:var(--bg);background-image:var(--noise);color:var(--text);
+    font-family:var(--body);font-size:16px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    padding:0 16px calc(84px + env(safe-area-inset-bottom));
   }
   .wrap{max-width:var(--maxw);margin:0 auto}
 
   /* ---------- masthead ---------- */
-  header{padding:34px 0 18px}
-  .brand{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1}
+  header{padding:24px 16px 20px;margin:0 -16px 24px;border-bottom:1px solid var(--line)}
+  header > *{max-width:var(--maxw);margin-left:auto;margin-right:auto}
+  .brand{font-family:var(--disp);font-size:32px;font-weight:600;font-style:italic;letter-spacing:-.5px;line-height:1.1;color:var(--accent-text)}
   .brand i{font-style:normal;color:var(--accent)}
-  .tag{color:var(--muted);font-size:14px;margin-top:6px}
 
-  /* ---------- tabs ---------- */
-  nav{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:18px 0 22px}
+  /* ---------- tabs: bottom nav on mobile, sidebar on desktop ---------- */
+  nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(44,34,24,.04)}
   nav button{
-    background:none;border:0;color:var(--muted);font:inherit;font-size:15px;
-    padding:10px 12px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;
+    flex:1;background:none;border:0;color:var(--muted);font-family:var(--body);font-size:10px;font-weight:600;
+    letter-spacing:.4px;text-transform:uppercase;padding:8px 4px;cursor:pointer;min-height:48px;
+    display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .15s;
   }
-  nav button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--accent)}
+  nav button svg{width:20px;height:20px}
+  nav button:hover{color:var(--text)}
+  nav button[aria-selected="true"]{color:var(--accent-text)}
   nav button:focus-visible,button:focus-visible,a:focus-visible,select:focus-visible{
-    outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+    outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
 
   /* ---------- lesson ---------- */
-  .lesson{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 18px}
-  .lesson .eyebrow{color:var(--accent);font-size:13px;margin:0 0 6px}
-  .lesson h2{margin:0 0 14px;font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.25}
-  .lesson p{margin:0 0 13px;font-size:15px;color:#D6D6DE}
-  .lesson p strong{color:var(--text);font-weight:500}
+  .lesson{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 22px;box-shadow:var(--shadow);margin-top:6px}
+  .lesson .eyebrow{color:var(--accent-text);font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;margin:0 0 6px}
+  .lesson h2{margin:0 0 14px;font-family:var(--disp);font-size:30px;font-weight:500;font-style:italic;letter-spacing:-.5px;line-height:1.15}
+  .lesson p{margin:0 0 13px;font-size:15px;color:var(--text)}
+  .lesson p strong{color:var(--text);font-weight:600}
   .lesson .src{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;margin-top:4px}
 
   /* ---------- technique cards ---------- */
   .tech{
     display:block;width:100%;text-align:left;background:var(--surface);
-    border:1px solid var(--line);border-radius:var(--r);padding:15px;margin-bottom:8px;
-    color:inherit;font:inherit;cursor:pointer;
+    border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;margin-bottom:10px;
+    color:inherit;font:inherit;cursor:pointer;box-shadow:var(--shadow);
+    transition:border-color .15s,transform .15s,box-shadow .15s;
   }
-  .tech h3{margin:0 0 3px;font-size:16px;font-weight:500}
-  .tech .rhythm{color:var(--accent);font-size:13px;font-variant-numeric:tabular-nums}
-  .tech p{margin:5px 0 0;color:var(--muted);font-size:14px}
+  .tech:hover{border-color:var(--accent-border);transform:translateX(2px);box-shadow:0 4px 14px rgba(44,34,24,.06)}
+  .tech h3{margin:0 0 3px;font-family:var(--disp);font-size:19px;font-weight:500;letter-spacing:-.2px}
+  .tech .rhythm{color:var(--accent-text);font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;font-variant-numeric:tabular-nums}
+  .tech p{margin:6px 0 0;color:var(--muted);font-size:14px}
 
   /* ---------- buttons ---------- */
   .btn{
-    background:var(--accent);color:#141416;border:0;border-radius:10px;
-    font:inherit;font-weight:500;font-size:15px;padding:12px 20px;cursor:pointer;
+    background:var(--accent);color:var(--on-accent);border:1px solid var(--accent);border-radius:9px;
+    font-family:var(--body);font-weight:600;font-size:14px;letter-spacing:.1px;padding:11px 20px;cursor:pointer;
+    transition:all .2s;
   }
-  .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
-  .btn.quiet{background:transparent;color:var(--muted);border:0;padding:12px 4px}
-  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}
+  .btn:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent-text);background:var(--accent-dim)}
+  .btn.quiet{background:transparent;color:var(--muted);border:0;padding:11px 4px}
+  .btn.quiet:hover{color:var(--text);background:transparent}
+  .row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-top:16px}
   select{
     background:var(--surface-2);color:var(--text);border:1px solid var(--line);
-    border-radius:10px;padding:11px 12px;font:inherit;font-size:15px;
+    border-radius:8px;padding:10px 13px;font-family:var(--body);font-size:15px;
   }
-  label.sel{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--muted)}
+  select:focus{border-color:var(--accent);background:var(--surface);outline:none}
+  label.sel{display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
 
   /* ---------- notices ---------- */
   .note{
-    background:var(--surface-2);border-left:2px solid var(--accent);
-    border-radius:0 10px 10px 0;padding:12px 14px;font-size:14px;color:#D6D6DE;margin:0 0 14px
+    background:var(--accent-dim);border-left:3px solid var(--accent);
+    border-radius:0 8px 8px 0;padding:14px 18px;font-size:14.5px;color:var(--text);margin:0 0 16px
   }
-  .note.danger{border-left-color:var(--warn)}
-  .note strong{color:var(--text);font-weight:500}
+  .note.danger{background:var(--warn-dim);border-left-color:var(--warn)}
+  .note strong{color:var(--text);font-weight:600}
 
   /* ---------- progress ---------- */
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
-  .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px}
-  .stat b{display:block;font-size:26px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-  .stat span{color:var(--muted);font-size:13px}
-  .log{font-size:14px;color:var(--muted)}
-  .log div{padding:9px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
+  .stat b{display:block;font-family:var(--disp);font-size:30px;font-weight:500;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+  .stat span{color:var(--muted);font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase}
+  .log{font-size:14px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:4px 18px;box-shadow:var(--shadow)}
+  .log div{padding:11px 0;border-bottom:1px dotted var(--line);display:flex;justify-content:space-between;gap:12px}
+  .log div:last-child{border-bottom:0}
+  .log div span:first-child{color:var(--text)}
+  .subhead{font-family:var(--disp);font-weight:500;font-size:20px;letter-spacing:-.1px;margin:32px 0 12px}
+  .data-card{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;margin-bottom:10px;box-shadow:var(--shadow)}
+  .data-card h3{font-family:var(--disp);font-weight:500;font-size:17px;margin:0}
+  .data-card p{margin:3px 0 0;color:var(--muted);font-size:13.5px}
+  .toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);font-weight:500;font-size:14px;padding:12px 18px;border-radius:10px;z-index:60;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 8px 24px rgba(44,34,24,.18);max-width:calc(100% - 32px)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
   /* ---------- pacer ---------- */
   #pacer{
-    position:fixed;inset:0;background:var(--bg);z-index:50;display:none;
+    position:fixed;inset:0;background:var(--bg);background-image:var(--noise);z-index:50;display:none;
     flex-direction:column;align-items:center;justify-content:center;
     padding:24px 20px calc(24px + env(safe-area-inset-bottom));
   }
@@ -123,40 +158,50 @@
   .centre{
     position:absolute;inset:0;display:grid;place-content:center;text-align:center;pointer-events:none
   }
-  .phase{font-size:20px;font-weight:500;letter-spacing:-.01em}
-  .count{font-size:44px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.03em;line-height:1.1}
-  .side{font-size:13px;color:var(--muted);min-height:18px}
+  .phase{font-family:var(--disp);font-size:22px;font-weight:500;font-style:italic;letter-spacing:-.2px}
+  .count{font-family:var(--disp);font-size:48px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-1px;line-height:1.1}
+  .side{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);min-height:18px}
   .meta{color:var(--muted);font-size:14px;margin-top:22px;font-variant-numeric:tabular-nums}
-  .pacer-title{font-size:15px;color:var(--muted);margin-bottom:20px}
-  #pacerPrompt{font-size:15px;color:#D6D6DE;max-width:340px;text-align:center;margin-top:18px;min-height:22px}
+  .pacer-title{font-family:var(--disp);font-size:24px;font-style:italic;font-weight:500;color:var(--text);margin-bottom:20px}
+  #pacerPrompt{font-size:15px;color:var(--muted);max-width:340px;text-align:center;margin-top:18px;min-height:22px}
 
-  @media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto} }
+  @media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto;transition:none!important} }
   .hide{display:none !important}
-  footer{color:var(--muted);font-size:13px;margin-top:34px;border-top:1px solid var(--line);padding-top:16px}
-  footer a{color:var(--muted)}
+
+  @media (min-width:768px){
+    body{padding:0 40px 48px 280px}
+    body::before{content:"";position:fixed;top:0;left:0;bottom:0;width:240px;border-right:1px solid var(--line);background:color-mix(in srgb,var(--surface) 50%,transparent);z-index:30}
+    header{position:fixed;top:0;left:0;width:240px;z-index:40;margin:0;padding:24px 28px 0;border:0}
+    .brand{font-size:26px}
+    nav{top:86px;bottom:auto;left:16px;right:auto;width:208px;flex-direction:column;gap:2px;background:none;border:0;box-shadow:none;padding:0}
+    nav button{flex:none;flex-direction:row;gap:12px;padding:10px 12px;border-radius:9px;font-size:14px;font-weight:500;letter-spacing:.1px;text-transform:none;min-height:0}
+    nav button:hover:not([aria-selected="true"]){background:var(--hover)}
+    nav button[aria-selected="true"]{background:var(--accent-dim);font-weight:600}
+    .toast{left:auto;right:24px;bottom:24px;transform:translateY(20px)}
+    .toast.show{transform:none}
+    .wrap{padding-top:40px}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <header>
-    <div class="brand">breathhub<i>.</i></div>
-    <div class="tag">Ten techniques, paced.</div>
+    <div class="brand">breathe<i>.</i></div>
   </header>
 
   <nav role="tablist">
-    <button role="tab" id="tab-techniques" aria-selected="true" onclick="show('techniques')">Techniques</button>
-    <button role="tab" id="tab-progress" aria-selected="false" onclick="show('progress')">Progress</button>
+    <button role="tab" id="tab-techniques" aria-selected="true" onclick="show('techniques')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M3 12h15a3 3 0 1 1-3 3"/><path d="M3 16h7"/></svg>Techniques</button>
+    <button role="tab" id="tab-progress" aria-selected="false" onclick="show('progress')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Progress</button>
   </nav>
 
   <section id="view-techniques"></section>
   <section id="view-progress" class="hide"></section>
 
-  <footer>
-    Educational only — not medical advice. Practise seated or lying down.
-    Never do breath-holds or fast breathing in or near water, or while driving.
-  </footer>
 </div>
+
+<input type="file" id="restoreFile" accept="application/json,.json" hidden onchange="restoreBackup(this)">
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- ============ PACER ============ -->
 <div id="pacer" role="dialog" aria-modal="true" aria-label="Breathing pacer">
@@ -186,7 +231,7 @@
 
 <script>
 /* =======================================================================
-   breathhub. — data
+   breathe. — data
    ======================================================================= */
 
 const TECHNIQUES = {
@@ -332,7 +377,6 @@ function show(v){
 function renderTechniques(){
   const el = document.getElementById('view-techniques');
   el.innerHTML = `
-    <div class="note">Pick anything. Duration is set on the next screen.</div>
     ${Object.entries(TECHNIQUES).map(([k,t])=>`
       <button class="tech" onclick="openTechnique('${k}')">
         <h3>${t.name}</h3>
@@ -405,13 +449,68 @@ function renderProgress(){
     </div>
     ${state.bolt.length ? `<div class="note">BOLT scores: ${state.bolt.slice(-6).map(b=>b.v+'s').join(' · ')}</div>` : ''}
     <div class="log">
-      ${recent.length ? recent.map(r=>`<div><span>${r.n}</span><span>${r.d}</span></div>`).join('')
+      ${recent.length ? recent.map(r=>`<div><span>${esc(r.n)}</span><span>${esc(r.d)}</span></div>`).join('')
         : '<div><span>Nothing logged yet. Start with Day 1.</span></div>'}
     </div>
     <div class="row">
       <button class="btn ghost" onclick="toggleSound()">Cue sound: ${state.sound?'on':'off'}</button>
       <button class="btn quiet" onclick="resetAll()">Reset all data</button>
+    </div>
+    <h2 class="subhead">Your data</h2>
+    <div class="data-card">
+      <div><h3>Full backup → JSON</h3><p>Everything in one file, so you can move devices.</p></div>
+      <button class="btn" onclick="downloadBackup()">Download</button>
+    </div>
+    <div class="data-card">
+      <div><h3>Restore from backup</h3><p>Load a JSON file you exported earlier. Replaces current data.</p></div>
+      <button class="btn ghost" onclick="document.getElementById('restoreFile').click()">Choose file</button>
     </div>`;
+}
+
+function esc(v){
+  return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ---------- backup / restore ---------- */
+let toastTimer = null;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'), 1900);
+}
+
+function downloadBackup(){
+  const text = JSON.stringify({app:'breathe', exported:new Date().toISOString(), data:state}, null, 2);
+  try{
+    const url = URL.createObjectURL(new Blob([text], {type:'application/json'}));
+    const a = document.createElement('a');
+    a.href = url; a.download = 'breathe-backup.json';
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 200);
+    toast('Downloaded breathe-backup.json');
+  }catch(e){ toast('Download failed on this device'); }
+}
+
+function restoreBackup(input){
+  const f = input.files && input.files[0];
+  input.value = '';
+  if(!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    let d;
+    try{
+      const parsed = JSON.parse(rd.result);
+      d = parsed && parsed.data ? parsed.data : parsed;
+      if(!d || typeof d !== 'object' || !Array.isArray(d.log) || typeof d.sessions !== 'number') throw 0;
+    }catch(e){ return toast('That file could not be read'); }
+    if(!confirm('Replace the progress on this device with this backup?')) return;
+    const next = Object.assign(defaults(), d);
+    if(!Array.isArray(next.bolt)) next.bolt = [];
+    if(!next.days || typeof next.days !== 'object') next.days = {};
+    state = next; save(); renderProgress();
+    toast('Backup restored');
+  };
+  rd.readAsText(f);
 }
 
 function isoDay(d){ return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
