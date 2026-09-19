@@ -1,5 +1,5 @@
 /* breathe. — minimal offline cache */
-const CACHE = 'breathhub-v3';
+const CACHE = 'breathhub-v4';
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
