@@ -60,7 +60,7 @@
   .wrap{max-width:var(--maxw);margin:0 auto}
 
   /* ---------- masthead ---------- */
-  header{padding:24px 16px 20px;margin:0 -16px 24px;border-bottom:1px solid var(--line)}
+  header{padding:calc(24px + env(safe-area-inset-top)) 16px 20px;margin:0 -16px 24px;border-bottom:1px solid var(--line)}
   header > *{max-width:var(--maxw);margin-left:auto;margin-right:auto}
   .brand{font-family:var(--disp);font-size:32px;font-weight:600;font-style:italic;letter-spacing:-.5px;line-height:1.1;color:var(--accent-text)}
   .brand i{font-style:normal;color:var(--accent)}
@@ -145,7 +145,7 @@
   #pacer{
     position:fixed;inset:0;background:var(--bg);background-image:var(--noise);z-index:50;display:none;
     flex-direction:column;align-items:center;justify-content:center;
-    padding:24px 20px calc(24px + env(safe-area-inset-bottom));
+    padding:calc(24px + env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom));
   }
   #pacer.on{display:flex}
   .ring-wrap{position:relative;width:min(84vw,300px);aspect-ratio:1}
@@ -171,9 +171,9 @@
   @media (min-width:768px){
     body{padding:0 40px 48px 280px}
     body::before{content:"";position:fixed;top:0;left:0;bottom:0;width:240px;border-right:1px solid var(--line);background:color-mix(in srgb,var(--surface) 50%,transparent);z-index:30}
-    header{position:fixed;top:0;left:0;width:240px;z-index:40;margin:0;padding:24px 28px 0;border:0}
+    header{position:fixed;top:0;left:0;width:240px;z-index:40;margin:0;padding:calc(24px + env(safe-area-inset-top)) 28px 0;border:0}
     .brand{font-size:26px}
-    nav{top:86px;bottom:auto;left:16px;right:auto;width:208px;flex-direction:column;gap:2px;background:none;border:0;box-shadow:none;padding:0}
+    nav{top:calc(86px + env(safe-area-inset-top));bottom:auto;left:16px;right:auto;width:208px;flex-direction:column;gap:2px;background:none;border:0;box-shadow:none;padding:0}
     nav button{flex:none;flex-direction:row;gap:12px;padding:10px 12px;border-radius:9px;font-size:14px;font-weight:500;letter-spacing:.1px;text-transform:none;min-height:0}
     nav button:hover:not([aria-selected="true"]){background:var(--hover)}
     nav button[aria-selected="true"]{background:var(--accent-dim);font-weight:600}
