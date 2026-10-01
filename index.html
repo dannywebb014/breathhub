@@ -70,7 +70,7 @@
   .brand{font-family:var(--disp);font-size:32px;font-weight:600;font-style:var(--hub-logo-style, italic);letter-spacing:-.5px;line-height:1.1;color:var(--accent-text)}
   .brand i{font-style:normal;color:var(--accent)}
 
-  /* ---------- tabs: bottom nav on mobile, sidebar on desktop ---------- */
+  /* ---------- tabs: bottom nav on mobile, a floating dock on desktop ---------- */
   nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(44,34,24,.04)}
   nav button{
     flex:1;background:none;border:0;color:var(--muted);font-family:var(--body);font-size:10px;font-weight:600;
@@ -173,18 +173,18 @@
   @media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto;transition:none!important} }
   .hide{display:none !important}
 
+  /* Desktop: the phone's bottom tabs become a floating dock, so the page keeps its
+     full width and stays centred. Same layout as food. and train. */
   @media (min-width:768px){
-    body{padding:0 40px 48px 280px}
-    body::before{content:"";position:fixed;top:0;left:0;bottom:0;width:240px;border-right:1px solid var(--line);background:color-mix(in srgb,var(--surface) 50%,transparent);z-index:30}
-    header{position:fixed;top:0;left:0;width:240px;z-index:40;margin:0;padding:calc(24px + env(safe-area-inset-top)) 28px 0;border:0}
-    .brand{font-size:26px}
-    nav{top:calc(86px + env(safe-area-inset-top));bottom:auto;left:16px;right:auto;width:208px;flex-direction:column;gap:2px;background:none;border:0;box-shadow:none;padding:0}
-    nav button{flex:none;flex-direction:row;gap:12px;padding:10px 12px;border-radius:9px;font-size:14px;font-weight:500;letter-spacing:.1px;text-transform:none;min-height:0}
-    nav button:hover:not([aria-selected="true"]){background:var(--hover)}
-    nav button[aria-selected="true"]{background:var(--accent-dim);font-weight:600}
-    .toast{left:auto;right:24px;bottom:24px;transform:translateY(20px)}
-    .toast.show{transform:none}
-    .wrap{padding-top:40px}
+    body{padding:0 40px calc(112px + env(safe-area-inset-bottom))}
+    nav{left:50%;right:auto;bottom:calc(20px + env(safe-area-inset-bottom));translate:-50% 0;gap:4px;padding:5px;border:1px solid var(--line);border-radius:999px;
+      background:color-mix(in srgb,var(--surface) 92%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+      box-shadow:0 10px 30px rgba(44,34,24,.16),0 1px 3px rgba(44,34,24,.08)}
+    nav button{flex:none;flex-direction:row;gap:8px;padding:9px 18px;border-radius:999px;font-size:14px;font-weight:600;letter-spacing:.1px;text-transform:none;min-height:0}
+    nav button svg{width:18px;height:18px}
+    nav button:hover:not([aria-selected="true"]){background:var(--hover);color:var(--text)}
+    nav button[aria-selected="true"]{background:var(--accent);color:var(--on-accent)}
+    .toast{bottom:calc(96px + env(safe-area-inset-bottom))}
   }
 </style>
 </head>
