@@ -19,8 +19,11 @@
 <link rel="stylesheet" href="https://dannywebb014.github.io/lifeos/fonts.css">
 <script type="module">
   // One sign-in for every hub app (lifeos/auth.js): no verified session, off to /lifeos/signin/.
-  import { requireAuth } from "/lifeos/auth.js";
-  await requireAuth();
+  // breathe. then syncs through the same client (see "sync" in the main script).
+  import { requireAuth, supabase } from "/lifeos/auth.js";
+  const session = await requireAuth();
+  window.__hubAuth = { supabase, session };
+  window.dispatchEvent(new CustomEvent("hub-auth", { detail: window.__hubAuth }));
 </script>
 <style>
   /* My Hub theme (matches food hub and training log) — Saffron accent */
@@ -365,7 +368,56 @@ function defaults(){
 }
 function save(){
   try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+  queuePush();
 }
+
+/* =======================================================================
+   sync — app_state row 'breathe' in Supabase, through the shared lifeOS.
+   client. Opening combines this device with Supabase (so practice on two
+   devices adds up); after that every change is sent a moment later.
+   ======================================================================= */
+let hub = null, pushTimer = null;
+function entryKeys(list){
+  // Older entries have no timestamp: tell same-day repeats apart by their order.
+  const seen = {};
+  return (list||[]).map(e => {
+    if(e && e.t) return [`${e.n||e.v}|${e.d}|${e.t}`, e];
+    const base = `${e.n||e.v}|${e.d}`; seen[base] = (seen[base]||0) + 1;
+    return [`${base}|#${seen[base]}`, e];
+  });
+}
+const gbTime = (e) => { const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(e.d||''); return (e.t || (m ? Date.UTC(+m[3], m[2]-1, +m[1]) : 0)); };
+function union(a, b){ return [...new Map([...entryKeys(a), ...entryKeys(b)]).values()].sort((x, y) => gbTime(x) - gbTime(y)); }
+function combine(local, remote){
+  const out = Object.assign(defaults(), remote, { sound: local.sound });
+  out.days = Object.assign({}, remote.days, local.days);
+  out.log = union(remote.log, local.log);
+  out.bolt = union(remote.bolt, local.bolt);
+  const sessions = out.log.filter(e => !/^BOLT/.test(e.n||'')).length;
+  out.sessions = Math.max(local.sessions||0, remote.sessions||0, sessions);
+  out.seconds = Math.max(local.seconds||0, remote.seconds||0);
+  return out;
+}
+async function push(){
+  if(!hub) return;
+  const { error } = await hub.supabase.from('app_state').upsert(
+    { user_id: hub.session.user.id, app: 'breathe', data: state, updated_at: new Date().toISOString() },
+    { onConflict: 'user_id,app' });
+  if(error) console.warn('breathe. not synced yet:', error.message);
+}
+function queuePush(){ if(!hub) return; clearTimeout(pushTimer); pushTimer = setTimeout(push, 800); }
+async function startSync(h){
+  hub = h;
+  const { data, error } = await hub.supabase.from('app_state').select('data').eq('user_id', hub.session.user.id).eq('app', 'breathe').maybeSingle();
+  if(error){ console.warn('breathe. sync unavailable:', error.message); return; }
+  if(data && data.data && Object.keys(data.data).length) state = combine(state, data.data);
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+  push();
+  const on = document.querySelector('[role="tab"][aria-selected="true"]');
+  show(on && on.id === 'tab-progress' ? 'progress' : 'techniques');
+}
+if(window.__hubAuth) startSync(window.__hubAuth);
+else window.addEventListener('hub-auth', (e) => startSync(e.detail), { once: true });
 
 /* =======================================================================
    views
@@ -509,7 +561,7 @@ function restoreBackup(input){
       d = parsed && parsed.data ? parsed.data : parsed;
       if(!d || typeof d !== 'object' || !Array.isArray(d.log) || typeof d.sessions !== 'number') throw 0;
     }catch(e){ return toast('That file could not be read'); }
-    if(!confirm('Replace the progress on this device with this backup?')) return;
+    if(!confirm('Replace your progress with this backup? This replaces it on every device.')) return;
     const next = Object.assign(defaults(), d);
     if(!Array.isArray(next.bolt)) next.bolt = [];
     if(!next.days || typeof next.days !== 'object') next.days = {};
@@ -530,7 +582,7 @@ function streak(){
 
 function toggleSound(){ state.sound = !state.sound; save(); renderProgress(); }
 function resetAll(){
-  if(confirm('Delete all progress on this device?')){ state = defaults(); save(); renderProgress(); }
+  if(confirm('Delete all progress? This clears it on every device.')){ state = defaults(); save(); renderProgress(); }
 }
 
 /* =======================================================================
@@ -681,8 +733,8 @@ function startBolt(){
     } else {
       clearInterval(id);
       const v = Math.round((performance.now()-t0)/1000);
-      state.bolt.push({v, d:new Date().toLocaleDateString('en-GB')});
-      state.log.push({n:`BOLT — ${v}s`, d:new Date().toLocaleDateString('en-GB')});
+      state.bolt.push({v, d:new Date().toLocaleDateString('en-GB'), t:Date.now()});
+      state.log.push({n:`BOLT — ${v}s`, d:new Date().toLocaleDateString('en-GB'), t:Date.now()});
       save();
       closePacer();
       alert(`BOLT: ${v} seconds.\n\nUnder 20s suggests a fast, light breathing pattern at rest. Around 40s is the usual target. Treat it as a comfort index rather than a fitness score.`);
@@ -764,7 +816,7 @@ function endSession(completed){
     if(secs > 20){
       state.sessions++;
       state.seconds += secs;
-      state.log.push({n:`${session.name} — ${Math.round(secs/60)} min`, d:new Date().toLocaleDateString('en-GB')});
+      state.log.push({n:`${session.name} — ${Math.round(secs/60)} min`, d:new Date().toLocaleDateString('en-GB'), t:Date.now()});
       if(completed) state.days[isoDay(new Date())] = true;
       save();
     }
