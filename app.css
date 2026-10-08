@@ -1,0 +1,165 @@
+/* breathe. — its look, inside its own shadow root (see /lifeos/embed.js). */
+
+  /* My Hub theme (matches food hub and training log) — Saffron accent */
+  :host{display:block;
+    --bg:#f4f1ea; --surface:#fffdf8; --surface-2:#f0ece3; --hover:#f9f6ef;
+    --line:#e5dfd0; --line-soft:#efebdf;
+    --text:#2c2218; --muted:#6b6055; --faint:#a8a295;
+    --accent:#c08020; --accent-hover:#a06a16; --accent-text:#8a5a14;   /* breathe. accent */
+    --accent-dim:#c0802014; --accent-border:#c0802030;
+    --warn:#b54e4e; --warn-dim:#b54e4e10;
+    --on-accent:#fff;
+    --shadow:0 1px 3px rgba(44,34,24,.06);
+    --noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.035 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    --disp:var(--hub-head, 'Lora',Georgia,serif);
+    --body:var(--hub-body, 'Source Sans 3',system-ui,-apple-system,Helvetica,Arial,sans-serif);
+    --r:12px;
+    --maxw:640px;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :host{
+      --bg:#1a1e1a; --surface:#232823; --surface-2:#2e342e; --hover:#2a302a;
+      --line:#3a423a; --line-soft:#343b34;
+      --text:#ebe8de; --muted:#a8a89c; --faint:#6b7568;
+      --accent:#e09d3a; --accent-hover:#eaae50; --accent-text:#e0b870;
+      --accent-dim:#e09d3a1c; --accent-border:#e09d3a38;
+      --warn:#c96b6b; --warn-dim:#c96b6b18;
+      --on-accent:#1a1e1a;
+      --shadow:0 1px 4px rgba(0,0,0,.35);
+      --noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      color-scheme:dark;
+    }
+  }
+  *{box-sizing:border-box}
+  .page{min-height:100%;
+    background:var(--bg);background-image:var(--noise);color:var(--text);
+    font-family:var(--body);font-size:16px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    padding:0 16px calc(84px + env(safe-area-inset-bottom));
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto}
+
+  /* ---------- masthead ---------- */
+  header{padding:calc(24px + env(safe-area-inset-top)) 16px 20px;margin:0 -16px 24px;border-bottom:1px solid var(--line)}
+  header > *{max-width:var(--maxw);margin-left:auto;margin-right:auto}
+  .brand{font-family:var(--disp);font-size:32px;font-weight:600;font-style:var(--hub-logo-style, italic);letter-spacing:-.5px;line-height:1.1;color:var(--accent-text)}
+  .brand i{font-style:normal;color:var(--accent)}
+
+  /* ---------- tabs: bottom nav on mobile, a floating dock on desktop ---------- */
+  nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(44,34,24,.04)}
+  nav button{
+    flex:1;background:none;border:0;color:var(--muted);font-family:var(--body);font-size:10px;font-weight:600;
+    letter-spacing:.4px;text-transform:uppercase;padding:8px 4px;cursor:pointer;min-height:48px;
+    display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .15s;
+  }
+  nav button svg{width:20px;height:20px}
+  nav button:hover{color:var(--text)}
+  nav button[aria-selected="true"]{color:var(--accent-text)}
+  nav button:focus-visible,button:focus-visible,a:focus-visible,select:focus-visible{
+    outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+  /* ---------- lesson ---------- */
+  .lesson{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 22px;box-shadow:var(--shadow);margin-top:6px}
+  .lesson .eyebrow{color:var(--accent-text);font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;margin:0 0 6px}
+  .lesson h2{margin:0 0 14px;font-family:var(--disp);font-size:30px;font-weight:500;font-style:var(--hub-logo-style, italic);letter-spacing:-.5px;line-height:1.15}
+  .lesson p{margin:0 0 13px;font-size:15px;color:var(--text)}
+  .lesson p strong{color:var(--text);font-weight:600}
+  .lesson .src{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;margin-top:4px}
+
+  /* ---------- technique cards ---------- */
+  .tech{
+    display:block;width:100%;text-align:left;background:var(--surface);
+    border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;margin-bottom:10px;
+    color:inherit;font:inherit;cursor:pointer;box-shadow:var(--shadow);
+    transition:border-color .15s,transform .15s,box-shadow .15s;
+  }
+  .tech:hover{border-color:var(--accent-border);transform:translateX(2px);box-shadow:0 4px 14px rgba(44,34,24,.06)}
+  .tech h3{margin:0 0 3px;font-family:var(--disp);font-size:19px;font-weight:500;letter-spacing:-.2px}
+  .tech .rhythm{color:var(--accent-text);font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;font-variant-numeric:tabular-nums}
+  .tech p{margin:6px 0 0;color:var(--muted);font-size:14px}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    background:var(--accent);color:var(--on-accent);border:1px solid var(--accent);border-radius:9px;
+    font-family:var(--body);font-weight:600;font-size:14px;letter-spacing:.1px;padding:11px 20px;cursor:pointer;
+    transition:all .2s;
+  }
+  .btn:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent-text);background:var(--accent-dim)}
+  .btn.quiet{background:transparent;color:var(--muted);border:0;padding:11px 4px}
+  .btn.quiet:hover{color:var(--text);background:transparent}
+  .row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-top:16px}
+  select{
+    background:var(--surface-2);color:var(--text);border:1px solid var(--line);
+    border-radius:8px;padding:10px 13px;font-family:var(--body);font-size:15px;
+  }
+  select:focus{border-color:var(--accent);background:var(--surface);outline:none}
+  label.sel{display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+
+  /* ---------- notices ---------- */
+  .note{
+    background:var(--accent-dim);border-left:3px solid var(--accent);
+    border-radius:0 8px 8px 0;padding:14px 18px;font-size:14.5px;color:var(--text);margin:0 0 16px
+  }
+  .note.danger{background:var(--warn-dim);border-left-color:var(--warn)}
+  .note strong{color:var(--text);font-weight:600}
+
+  /* ---------- progress ---------- */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
+  .stat b{display:block;font-family:var(--disp);font-size:30px;font-weight:500;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+  .stat span{color:var(--muted);font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase}
+  .log{font-size:14px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:4px 18px;box-shadow:var(--shadow)}
+  .log div{padding:11px 0;border-bottom:1px dotted var(--line);display:flex;justify-content:space-between;gap:12px}
+  .log div:last-child{border-bottom:0}
+  .log div span:first-child{color:var(--text)}
+  .subhead{font-family:var(--disp);font-weight:500;font-size:20px;letter-spacing:-.1px;margin:32px 0 12px}
+  .data-card{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;margin-bottom:10px;box-shadow:var(--shadow)}
+  .data-card h3{font-family:var(--disp);font-weight:500;font-size:17px;margin:0}
+  .data-card p{margin:3px 0 0;color:var(--muted);font-size:13.5px}
+  .toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);font-weight:500;font-size:14px;padding:12px 18px;border-radius:10px;z-index:60;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 8px 24px rgba(44,34,24,.18);max-width:calc(100% - 32px)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ---------- pacer ---------- */
+  #pacer{
+    position:fixed;inset:0;background:var(--bg);background-image:var(--noise);z-index:50;display:none;
+    flex-direction:column;align-items:center;justify-content:center;
+    padding:calc(24px + env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom));
+  }
+  #pacer.on{display:flex}
+  .ring-wrap{position:relative;width:min(84vw,300px);aspect-ratio:1}
+  .ring-wrap svg{width:100%;height:100%;display:block}
+  .seg{fill:none;stroke-width:3;stroke-linecap:butt;opacity:.3}
+  .seg.live{opacity:1}
+  .disc{fill:var(--accent);opacity:.13}
+  .disc-line{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:.65}
+  .marker{fill:var(--accent)}
+  .centre{
+    position:absolute;inset:0;display:grid;place-content:center;text-align:center;pointer-events:none
+  }
+  .phase{font-family:var(--disp);font-size:22px;font-weight:500;font-style:var(--hub-logo-style, italic);letter-spacing:-.2px}
+  .count{font-family:var(--disp);font-size:48px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-1px;line-height:1.1}
+  .side{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);min-height:18px}
+  .meta{color:var(--muted);font-size:14px;margin-top:22px;font-variant-numeric:tabular-nums}
+  .pacer-title{font-family:var(--disp);font-size:24px;font-style:var(--hub-logo-style, italic);font-weight:500;color:var(--text);margin-bottom:20px}
+  #pacerPrompt{font-size:15px;color:var(--muted);max-width:340px;text-align:center;margin-top:18px;min-height:22px}
+
+  @media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto;transition:none!important} }
+  .hide{display:none !important}
+
+  /* Desktop: the phone's bottom tabs become a floating dock, so the page keeps its
+     full width and stays centred. Same layout as food. and train. */
+  @media (min-width:768px){
+    .page{padding:0 40px calc(112px + env(safe-area-inset-bottom))}
+    /* The dock sits in its own strip along the bottom, so content stops above it instead of scrolling underneath. */
+    .page::after{content:"";position:fixed;left:0;right:0;bottom:0;height:calc(84px + env(safe-area-inset-bottom));background:var(--bg);background-image:var(--noise);border-top:1px solid var(--line);z-index:39}
+    nav{left:50%;right:auto;bottom:calc(20px + env(safe-area-inset-bottom));translate:-50% 0;gap:4px;padding:5px;border:1px solid var(--line);border-radius:999px;
+      background:var(--surface);box-shadow:var(--shadow)}
+    nav button{flex:none;flex-direction:row;gap:8px;padding:9px 18px;border-radius:999px;font-size:14px;font-weight:600;letter-spacing:.1px;text-transform:none;min-height:0}
+    nav button svg{width:18px;height:18px}
+    nav button:hover:not([aria-selected="true"]){background:var(--hover);color:var(--text)}
+    nav button[aria-selected="true"]{background:var(--accent);color:var(--on-accent)}
+    .toast{bottom:calc(96px + env(safe-area-inset-bottom))}
+  }
